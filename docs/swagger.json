@@ -1,0 +1,139 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample messaging worker.",
+        "title": "Sample Messaging Worker",
+        "contact": {},
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/messages/list": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/messages.ListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/messages.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/services/toggle": {
+            "post": {
+                "description": "toggle worker status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Worker Service"
+                ],
+                "summary": "toggle worker status",
+                "parameters": [
+                    {
+                        "description": "Toggle Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.ToggleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/service.ToggleResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/service.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "messages.Error": {
+            "type": "object",
+            "properties": {
+                "ERROR": {}
+            }
+        },
+        "messages.ListResponse": {
+            "type": "object",
+            "properties": {
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/messages.Message"
+                    }
+                }
+            }
+        },
+        "messages.Message": {
+            "type": "object",
+            "properties": {
+                "external_message_id": {
+                    "type": "string"
+                },
+                "sent_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.Error": {
+            "type": "object",
+            "properties": {
+                "ERROR": {}
+            }
+        },
+        "service.ServiceStatus": {
+            "type": "string",
+            "enum": [
+                "STOPPED",
+                "WORKING"
+            ],
+            "x-enum-varnames": [
+                "ServiceStatusStopped",
+                "ServiceStatusWorking"
+            ]
+        },
+        "service.ToggleRequest": {
+            "type": "object"
+        },
+        "service.ToggleResponse": {
+            "type": "object",
+            "properties": {
+                "SERVICE_STATUS": {
+                    "$ref": "#/definitions/service.ServiceStatus"
+                }
+            }
+        }
+    }
+}
